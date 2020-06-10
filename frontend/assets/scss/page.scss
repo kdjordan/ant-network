@@ -1,0 +1,58 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 4rem;
+    color: $color1;
+
+    &__title {
+        text-align: center;
+        margin-top: 4rem;
+        margin-bottom: 1rem;
+        color: $color1;
+        font-family: $font4;
+        font-size: 5rem;
+
+        &--sub {
+            font-size: 4rem;
+        }
+    }
+
+    &__ul {
+        list-style: circle;
+        margin-bottom: 4rem;
+    }
+
+    & li {
+        margin: .5rem 0;
+        line-height: 1.5;
+    }
+
+
+    &__pitch {
+        width: 70%;
+        margin: 0 auto;
+
+        &--headline {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+
+        }
+    }
+}
+
+.underline {
+    margin: 0 auto;
+    border-top: 4px solid $color1;
+    width: 80%;
+    margin-bottom: 2rem;
+  }
+
+  h3 {
+    margin: 2rem auto;
+    font-size: 5rem;
+    font-family: $font4;
+    color: $color1;
+    text-align: center;
+}

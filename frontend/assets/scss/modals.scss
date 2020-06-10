@@ -1,0 +1,95 @@
+strong {
+    color: black;
+}
+
+.limited {
+    font-size: 1.3rem;
+    font-style: italic;
+}
+
+.font-reduce {
+    font-size: 3.5rem !important;
+}
+
+.margin-btm {
+margin-bottom: 4rem;
+}
+  
+
+.inner-modal {
+    width: 100%;
+    color: $color1;
+
+    &__title {
+        background: $color1;
+        text-align: center;
+        color:white;
+        padding: 2rem 0;
+        font-family: $font4;
+        border-top-right-radius: 1rem;
+        border-top-left-radius: 1rem;
+        font-size: 4.2rem;
+    }
+
+    &__desc {
+        width: 90%;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    &__ul {
+        list-style: circle;
+        width: 80%;
+        margin: 0 auto;
+        margin-bottom: 4rem;
+    }
+
+    & li {
+        margin: .5rem 0;
+        line-height: 1.5;
+    }
+
+    &__pricing {
+        text-align: center;
+        padding-bottom: 1rem;
+        font-family: $font4;
+        font-size: 4rem;
+    }
+
+    &__price-container {
+        width: 70%;
+        margin: 0 auto;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4rem;
+
+        &--left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &--right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    &__cost {
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 4rem;
+        font-weight: 400;
+
+        &--dollar {
+        font-size: 2rem;
+        vertical-align: middle;
+        }
+
+        &--yr {
+            font-size: 2.5rem;
+        }
+    }
+}

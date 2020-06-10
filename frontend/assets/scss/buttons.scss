@@ -1,0 +1,147 @@
+.button {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 1.3rem;
+    cursor: pointer;
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    border: 2px solid transparent;
+
+    &--primary {
+        background: $color2;
+        color: white;
+        border: 2px solid white;
+        transition: all .4s;
+
+        &:hover {
+            background: transparent;
+            color: $color2;
+            border: 2px solid $color2;
+            font-weight: bold;
+        }
+    }
+
+    &--trans {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+        transition: all .4s ease;
+
+        &:hover {
+            background: white;
+            color: $color2;
+            border: 2px solid white;
+    
+        }
+    }
+
+}
+
+
+
+.gold {
+    background: $colorGold;
+    color: white;
+    border: 2px solid white;
+    transition: all .4s;
+
+    &--banner-ads {
+        background: $colorGold;
+        color: white;
+        border: 2px solid white;
+        transition: all .4s;
+        margin: 0 auto;
+        margin-top: 1rem;
+        width: 60%;
+
+        &:hover {
+            background: transparent;
+            color: $color1;
+            border: 2px solid $color1;
+        }
+    }
+    
+    &:hover {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+    }
+}
+
+.events-btn {
+    width: 15%;
+    text-align: center;
+    margin: 2rem 0;
+    border: 2px solid white;
+    color: white;
+    transition: all .4s ease;
+
+    &:hover {
+        background: white;
+        color: $color1;
+        border: 2px solid $color1;
+    }
+
+}
+
+
+.white-btn {
+    width: 15rem;
+    background: white;
+    text-align: center;
+    color: $color2;
+    border: 2px solid white;
+    transition: all .4s ease;
+
+    &:hover {
+        background: transparent;
+        color: white;
+    }
+}
+
+.size-50{
+    width: 50%;
+    color: $color1;
+}
+
+.buy-button {
+    width: 25%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    background: $colorGold;
+    color: white;
+    border: 2px solid white;
+    transition: all .4s;
+
+    &:hover {
+        background: transparent;
+        color: $colorGold;
+        border: 2px solid $colorGold;
+    }
+    
+}
+
+.send-btn {
+    width: 50%;
+    margin: 0 auto !important;
+    margin: 2rem 0;
+    background: $color2;
+    color: white;
+    border: 2px solid white;
+    transition: all .4s;
+
+    &:hover {
+        background: transparent;
+        color: $color2;
+        border: 2px solid $color2;
+    }
+
+}
+
+.full {
+    width: 100%;
+}
+
+.margin-btm-2 {
+    margin-bottom: 2rem;
+}
