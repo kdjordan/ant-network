@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-antique-dev-101802-authRole",
+            "UnauthRoleArn": "arn:aws:iam::709009131036:role/amplify-antique-dev-101802-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::709009131036:role/amplify-antique-dev-101802-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "amplify-antique-dev-101802-deployment",
+            "UnauthRoleName": "amplify-antique-dev-101802-unauthRole",
+            "StackName": "amplify-antique-dev-101802",
+            "StackId": "arn:aws:cloudformation:us-east-2:709009131036:stack/amplify-antique-dev-101802/59e89c00-ab3e-11ea-a06e-0a569e9f7d94",
+            "AmplifyAppId": "d228fkjw5hlco5"
+        }
+    }
+}
