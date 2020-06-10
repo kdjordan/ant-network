@@ -1,1 +1,10 @@
-{}
+{
+	"auth": {
+		"antique06ed3e46": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	}
+}

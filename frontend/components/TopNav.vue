@@ -13,8 +13,8 @@
             <NuxtLink to="/daily-news" class="link">Daily News</NuxtLink>
             <NuxtLink to="#" class="link">Vendors Needed</NuxtLink>
             <NuxtLink to="/advertise" class="link">Advertise</NuxtLink>
-            <NuxtLink @click.native="doModal" to="#" class="link" >Contact</NuxtLink>
-            <NuxtLink to="#" class="link" @click.prevent="doModal">Login</NuxtLink>
+            <NuxtLink @click.native="doModal('contact')" to="#" class="link" >Contact</NuxtLink>
+            <NuxtLink to="#" class="link" @click.native="doModal('login')">Login</NuxtLink>
         </nav>
 
     </div>
@@ -29,9 +29,15 @@ export default {
         BannerAds
     },
     methods: {
-        doModal() {
-             this.$store.commit('modal/setModalActive')
-            this.$store.commit('modal/setModalType', 'contact')
+        doModal(type) {
+            if(type == 'contact'){
+                this.$store.commit('modal/setModalActive')
+                this.$store.commit('modal/setModalType', 'contact')
+            } else {
+                this.$store.commit('modal/setModalActive')
+                this.$store.commit('modal/setModalType', 'login')
+                
+            }
         }
     }
 

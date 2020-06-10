@@ -43,6 +43,13 @@
           </div>
       </div>
 
+      <div v-if="getModalType == 'login'">
+          <div class="modal__container">
+            <LoginModal />
+            <div class="modal__close" @click="closeModal">close</div>
+          </div>
+      </div>
+
   </div>
 </template>
 
@@ -55,6 +62,7 @@ import MapModal from '@/components/modals/_mapModal'
 import EventsModal from '@/components/modals/_eventsModal'
 import SponserModal from '@/components/modals/_sponserModal'
 import ContactModal from '@/components/modals/_contactModal'
+import LoginModal from '@/components/modals/_loginModal'
 
 export default {
     components: {
@@ -63,7 +71,8 @@ export default {
         MapModal,
         EventsModal,
         SponserModal,
-        ContactModal
+        ContactModal,
+        LoginModal
     },
     computed: {
         ...mapGetters({
