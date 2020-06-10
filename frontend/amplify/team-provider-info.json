@@ -10,6 +10,11 @@
             "StackName": "amplify-antique-dev-101802",
             "StackId": "arn:aws:cloudformation:us-east-2:709009131036:stack/amplify-antique-dev-101802/59e89c00-ab3e-11ea-a06e-0a569e9f7d94",
             "AmplifyAppId": "d228fkjw5hlco5"
+        },
+        "categories": {
+            "auth": {
+                "antique06ed3e46": {}
+            }
         }
     }
 }
