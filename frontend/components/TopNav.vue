@@ -14,7 +14,8 @@
             <NuxtLink to="#" class="link">Vendors Needed</NuxtLink>
             <NuxtLink to="/advertise" class="link">Advertise</NuxtLink>
             <NuxtLink @click.native="doModal('contact')" to="#" class="link" >Contact</NuxtLink>
-            <NuxtLink to="#" class="link" @click.native="doModal('login')">Login</NuxtLink>
+            <NuxtLink v-if="!$auth.isAuthenticated"  to="#" class="link" @click.native="doModal('login')">Login</NuxtLink>
+            <NuxtLink v-else  to="#" class="link" @click.native="logout">Logout</NuxtLInk>
         </nav>
 
     </div>
@@ -38,6 +39,9 @@ export default {
                 this.$store.commit('modal/setModalType', 'login')
                 
             }
+        },
+        logout() {
+            this.$store.dispatch('auth/logout')
         }
     }
 
