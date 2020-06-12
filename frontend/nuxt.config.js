@@ -53,7 +53,8 @@ export default {
         "~assets/scss/page.scss",
         "~assets/scss/animations.scss",
         "~assets/scss/modals.scss",
-        "~assets/scss/buttons.scss"
+        "~assets/scss/buttons.scss",
+        "~assets/scss/form.scss"
       ]
     },
     proxy: {

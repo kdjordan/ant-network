@@ -4,7 +4,7 @@
     <div class="dealers">
       <h3>Dealers</h3>
       <div class="underline"></div>
-      <div class="button button--primary w-50" @click="doModal">become a dealer</div>
+      <div class="button button--primary w-50">become a dealer</div>
         <div class="instruct">"click" on Dealer for details : "scroll" for more Dealers</div>
         <div class="filter-container">
           <div class="filter-container__left search">

@@ -13,12 +13,17 @@ export const mutations = {
     }
 }
 
+export const getters = {
+    getUser(state) {
+        return state.user
+    }
+}
+
 export const actions = {
     async load({ commit }){
         try {
             const user = await Auth.currentAuthenticatedUser()
             commit('set', user)
-            console.log(user)
             return user
         } catch (e) {
             commit('set', null)
@@ -26,10 +31,13 @@ export const actions = {
         } 
     },
 
-    async register(__, { email, password} ) {
+    async register(__, { email, password, shopname } ) {
         const user = await Auth.signUp({
             username: email,
-            password
+            password,
+            attributes: {
+                'custom:shopName': shopname
+            }
         })
         return user
     },
@@ -42,6 +50,17 @@ export const actions = {
         const user = await Auth.signIn(email, password)
         commit('set', user)
         return user
+    },
+
+    async resendCode() {
+        try {
+            await Auth.resendCode({
+                ClientId: $auth.user
+            })
+        } catch (e) {
+            console.log("Error resending code", e)
+        }
+
     },
 
     async logout({ commit }) {

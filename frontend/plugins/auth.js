@@ -24,5 +24,4 @@ export default async({ store }) => {
     Vue.prototype.$auth = authService
     Vue.$auth = authService
     let response = await store.dispatch('auth/load')
-    console.log("back from rew", response)
 }
