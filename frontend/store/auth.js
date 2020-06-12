@@ -52,11 +52,9 @@ export const actions = {
         return user
     },
 
-    async resendCode() {
+    async resendCode(_,  email) {
         try {
-            await Auth.resendCode({
-                ClientId: $auth.user
-            })
+            await Auth.resendSignUp(email)
         } catch (e) {
             console.log("Error resending code", e)
         }
