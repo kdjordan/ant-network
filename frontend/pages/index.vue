@@ -19,6 +19,7 @@ import Sponsers from '@/components/Sponsers'
 import FeaturedEvents from '@/components/sub/FeaturedEvents'
 import { mapSettings } from '../static/constants/mapSettings'
 
+
 export default {
   transition: 'fade',
   components: {
