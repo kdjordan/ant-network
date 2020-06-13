@@ -1,0 +1,239 @@
+service:
+  name: antique-network
+
+plugins:
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-west-2'}
+
+  tracing:
+    lambda: true
+    apiGateway: true
+
+  environment:
+    # DEALERS_TABLE: Dealers-${self:provider.stage}
+    PROFILE_TABLE: Profile-${self:provider.stage}
+    DEALERS_IMAGES_BUCKET: ant-images-${self:provider.stage}
+    SIGNED_URL_EXPIRATION: 300
+    
+
+custom: 
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Todos API
+        description: Antique Network Backend
+    models:
+      - name: AddImageRequest
+        contentType: application/json
+        # schema: ${file(models/upload-image-request.json)}
+      # - name: UpdateTodoRequest
+      #   contentType: application/json
+      #   schema: ${file(models/update-todo-request.json)}
+   
+
+functions:
+
+  Auth:
+    handler: src/lambda/auth/auth.handler
+
+  # TODO: Configure this function
+  GetImages:
+    handler: src/lambda/http/getImages.handler
+    events:
+      - http:
+          # authorizer: Auth
+          method: get
+          path: dealer
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PROFILE_TABLE}
+      # - Effect: Allow
+      #   Action:
+      #     - dynamodb:Query
+      #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DEALERS_TABLE}
+
+  CreateImage:
+    handler: src/lambda/http/createImage.handler
+    events:
+      - http:
+          authorizer: Auth
+          method: post
+          path: dealer
+          cors: true
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new image
+            description: Create a new image
+            requestModels:
+              'application/json': AddImageRequest
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PROFILE_TABLE}
+
+  # TODO: Configure this function
+  # UpdateTodo:
+  #   handler: src/lambda/http/updateTodo.handler
+  #   events:
+  #     - http:
+  #         authorizer: Auth
+  #         method: patch
+  #         path: todos/{todoId}
+  #         cors: true
+  #         reqValidatorName: RequestBodyValidator
+  #         documentation:
+  #           summary: Create a new todo
+  #           description: Create a new todo
+  #           requestModels:
+  #             'application/json': UpdateTodoRequest
+  #   iamRoleStatements:
+  #     - Effect: Allow
+  #       Action:
+  #         - dynamodb:UpdateItem
+  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+  #     - Effect: Allow
+  #       Action:
+  #         - s3:PutObject
+  #         - s3:GetObject
+  #       Resource: arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*
+          
+
+  # TODO: Configure this function
+  # DeleteTodo:
+  #   handler: src/lambda/http/deleteTodo.handler
+  #   events:
+  #     - http:
+  #         authorizer: Auth
+  #         method: delete
+  #         path: todos/{todoId}
+  #         cors: true
+  #   iamRoleStatements:
+  #     - Effect: Allow
+  #       Action:
+  #         - dynamodb:DeleteItem
+  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+
+  # TODO: Configure this function
+  # GenerateUploadUrl:
+  #   handler: src/lambda/http/generateUploadUrl.handler
+  #   events:
+  #     - http:
+  #         method: post
+  #         path: todos/{todoId}/attachment
+  #         cors: true
+  #   iamRoleStatements:
+  #     - Effect: Allow
+  #       Action:
+  #         - dynamodb:UpdateItem
+  #       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    # ProfileDynamoDBTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     AttributeDefinitions:
+    #       - AttributeName: adminId #uuid
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: adminId
+    #         KeyType: HASH
+    #     BillingMode: PAY_PER_REQUEST
+    #     TableName: ${self:provider.environment.PROFILE_TABLE}
+          
+    ProfileTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: dealerId #uuid
+            AttributeType: S
+          - AttributeName: adminId #cognitoUserId
+            AttributeType: S
+          - AttributeName: name #cogniotUser custom:shopName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: dealerId
+            KeyType: HASH
+          - AttributeName: adminId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.PROFILE_TABLE}
+        # LocalSecondaryIndexes:
+        #   - IndexName: ${self:provider.environment.TODOS_ID_INDEX}
+        #     KeySchema:
+        #     - AttributeName: userId
+        #       KeyType: HASH
+        #     - AttributeName: createdAt
+        #       KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: ALL # What attributes will be copied to an index
+  
+    AttachmentBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.DEALERS_IMAGES_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: Policy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 
+                - 's3:GetObject'
+                - 's3:PutObject'
+              Resource: 'arn:aws:s3:::${self:provider.environment.DEALERS_IMAGES_BUCKET}/*'
+        Bucket: !Ref AttachmentBucket
+          
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
+        
