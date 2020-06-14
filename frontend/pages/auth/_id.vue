@@ -2,7 +2,8 @@
   <div class="dealer__container">
 
       <h1>Dealers  Page</h1>
-      <h2>Welcome back {{!$auth.isAuthenticated}}</h2>
+      <h2>Logged in :  {{$auth.isAuthenticated}}</h2>
+      <h2>Welcome back {{profile.shopname}}</h2>
         <h4>Upload an image</h4>
       <form @submit.prevent>
           <input type="file" accept="image/*">
@@ -19,6 +20,7 @@
 <script>
 export default {
     transition: 'fade',
+    middleware: ['auth'],
     layout: "dealerProfile",
     data() {
         return {
@@ -40,15 +42,19 @@ export default {
             return 'bugaloo'
         }
     },
-    async beforeCreate() {
+    async mounted() {
         try {
             console.log("before")
+            console.log("Middleware", this.$store.getters['auth/isAuthenticated'])
             const jwt = this.$auth.user.signInUserSession.idToken.jwtToken
+            if(!jwt) {
+                this.$router.push('/')
+            }
             console.log("JWT", jwt)
             let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
             { headers: { Authorization: `Bearer ${jwt}` } })
             
-            this.profile = profile.data.profile.Items
+            this.profile = profile.data.profile.Items[0]
         } catch(e) {
             console.log(e)
         }

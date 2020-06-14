@@ -19,6 +19,9 @@ export default {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Special+Elite&display=swap'}
     ]
   },
+  router: {
+    // middleware: 'auth'
+  },
   /*
   ** Customize the progress-bar color
   */

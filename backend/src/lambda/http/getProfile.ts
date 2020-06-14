@@ -9,6 +9,7 @@ const profileTable = process.env.PROFILE_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(event.headers.Authorization)
+    console.log(event)
   try {
     // check to see if user exists in Users table
     // let theUser = await checkUserExists(event)
