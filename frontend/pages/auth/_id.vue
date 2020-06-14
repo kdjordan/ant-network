@@ -2,7 +2,7 @@
   <div class="dealer__container">
 
       <h1>Dealers  Page</h1>
-      <h2>Welcome back {{this.$route.params.id}}</h2>
+      <h2>Welcome back {{!$auth.isAuthenticated}}</h2>
         <h4>Upload an image</h4>
       <form @submit.prevent>
           <input type="file" accept="image/*">
@@ -11,6 +11,7 @@
       </form>
       <button @click.prevent="details">Details</button>
         <h4>Your Images</h4>
+        {{profile}}
           <!-- image Grid v-for  -->
   </div>
 </template>
@@ -21,7 +22,7 @@ export default {
     layout: "dealerProfile",
     data() {
         return {
-            shopName: '',
+            profile: '',
             image: {
                 desc: ''
             }
@@ -39,9 +40,18 @@ export default {
             return 'bugaloo'
         }
     },
-    beforeCreate() {
-        // this.shopName = this.$store.state.auth.user.attributes['custom:shopName']
-        // console.log(this.$store.state.auth.user.attributes["custom:shopName"])
+    async beforeCreate() {
+        try {
+            console.log("before")
+            const jwt = this.$auth.user.signInUserSession.idToken.jwtToken
+            console.log("JWT", jwt)
+            let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
+            { headers: { Authorization: `Bearer ${jwt}` } })
+            
+            this.profile = profile.data.profile.Items
+        } catch(e) {
+            console.log(e)
+        }
     }
 
 }

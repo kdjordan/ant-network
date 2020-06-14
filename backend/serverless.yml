@@ -16,15 +16,73 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-west-2'}
+
+  environment:
+    PROFILE_TABLE: Profile-${self:provider.stage}
+    DEALERS_IMAGES_BUCKET: ant-images-${self:provider.stage}
+    SIGNED_URL_EXPIRATION: 300
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PROFILE_TABLE}
+  
+
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
-  environment:
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  
 
 functions:
-  hello:
-    handler: handler.hello
+
+  SignUp:
+    handler: src/lambda/http/signUp.handler
+    events:
+      - http:
+          method: post
+          path: signup
+          cors: true
+
+  GetProfile:
+    handler: src/lambda/http/getProfile.handler
     events:
       - http:
           method: get
-          path: hello
+          path: profile
+          cors: true
+    
+
+resources:
+  Resources:
+
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    ProfileTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: dealerId #uuid
+            AttributeType: S
+          - AttributeName: adminId #cognitoUserId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: dealerId
+            KeyType: HASH
+          - AttributeName: adminId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.PROFILE_TABLE}
+        
