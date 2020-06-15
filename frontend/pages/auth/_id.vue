@@ -2,7 +2,7 @@
   <div class="dealer__container">
 
       <h1>Dealers  Page</h1>
-      <h2>Logged in :  {{$auth.isAuthenticated}}</h2>
+      <!-- <h2>Logged in :  {{$auth.isAuthenticated}}</h2> -->
       <h2>Welcome back {{profile.shopname}}</h2>
         <h4>Upload an image</h4>
       <form @submit.prevent>
@@ -18,9 +18,10 @@
 </template>
 
 <script>
+import { Auth } from 'aws-amplify'
 export default {
     transition: 'fade',
-    middleware: ['auth'],
+    middleware: 'auth-admin',
     layout: "dealerProfile",
     data() {
         return {
@@ -33,7 +34,7 @@ export default {
     },
     methods: {
         details() {
-            console.log(this.$store.state.auth.user)
+            console.log(this.$store.state.awsAuth.user)
         }
     },
     computed: {
@@ -44,17 +45,17 @@ export default {
     },
     async mounted() {
         try {
-            console.log("before")
-            console.log("Middleware", this.$store.getters['auth/isAuthenticated'])
-            const jwt = this.$auth.user.signInUserSession.idToken.jwtToken
-            if(!jwt) {
-                this.$router.push('/')
-            }
-            console.log("JWT", jwt)
-            let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
-            { headers: { Authorization: `Bearer ${jwt}` } })
+            const user = await Auth.currentAuthenticatedUser()
+            this.$store.commit('awsAuth/set', user)
+            console.log("Logged IN", this.$store.getters['awsAuth/isAuthenticated'])
+            // let user = this.$store.getters['awsAuth/getUser']
+            console.log(user)
             
-            this.profile = profile.data.profile.Items[0]
+            // console.log("JWT", jwt)
+            // let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
+            // { headers: { Authorization: `Bearer ${jwt}` } })
+            
+            // this.profile = profile.data.profile.Items[0]
         } catch(e) {
             console.log(e)
         }

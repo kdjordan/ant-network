@@ -19,13 +19,20 @@ export const getters = {
     },
     isAuthenticated(state) {
         return state.isAuthenticated
+    },
+    getShopName(state) {
+        return state.user
     }
 }
 
 export const actions = {
     async load({ commit }){
         try {
-            const user = await Auth.currentAuthenticatedUser()
+            console.log('loading in LOAD')
+            const user = await Auth.currentAuthenticatedUser({bypassCache: true})
+            const {attributes} = user
+            console.log("USER")
+            console.log(user.attributes)
             commit('set', user)
             return user
         } catch (e) {
@@ -66,6 +73,9 @@ export const actions = {
 
     async logout({ commit }) {
         await Auth.signOut()
+        if(process.client) {
+            localStorage.clear()
+        }
         commit('set', null)
-    }
+    },
 }

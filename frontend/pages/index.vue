@@ -3,7 +3,7 @@
     <div class="map-container">
       <div class="map-container__inner">
         <div class="map-container__left">
-          <Map class="map" />
+          <!-- <Map class="map" /> -->
         </div>
         <div class="map-container__right">
           <FeaturedEvents />

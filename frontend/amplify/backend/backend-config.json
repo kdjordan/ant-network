@@ -1,10 +1,9 @@
 {
 	"auth": {
-		"frontendc3369cfc": {
+		"antffront5cf2a287": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
-			"dependsOn": [],
-			"customAuth": false
+			"dependsOn": []
 		}
 	}
 }

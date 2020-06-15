@@ -12,10 +12,11 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
-    "@aws-amplify/ui-vue": "^0.2.7",
+    
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/vue-fontawesome": "^0.1.9",
+    "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.3.6",
     "aws-amplify": "^3.0.17",
     "aws-amplify-vue": "^2.1.1",

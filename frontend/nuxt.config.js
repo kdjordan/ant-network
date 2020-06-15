@@ -36,7 +36,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/fontawesome.js', {src: '~/plugins/amplify.js', mode: 'client'}, '~/plugins/auth'
+    '~/plugins/fontawesome.js', {src: '~/plugins/amplify.js', mode: 'client'}
   ],
   /*
   ** Nuxt.js dev-modules

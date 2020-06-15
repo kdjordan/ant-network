@@ -1,5 +1,3 @@
-import Amplify from 'aws-amplify'
-import awsconfig from '~/aws-exports'
-
-Amplify.configure(awsconfig)
-
+import Amplify, { Auth } from 'aws-amplify';
+import awsmobile from '~/aws-exports';
+Amplify.configure(awsmobile);

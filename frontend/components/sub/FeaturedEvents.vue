@@ -56,7 +56,6 @@ export default {
     },
     mounted() {
         if(!(this.$store.state.timers.events.running)) {
-            console.log('mounted')
             this.$store.dispatch('timers/startCycleEvents')
         }
     }

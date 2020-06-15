@@ -88,7 +88,7 @@ export default {
     async resendCode() {
       try {
         console.log('calling')
-        this.$store.dispatch('auth/resendCode', this.registerForm.email)
+        this.$store.dispatch('awsAuth/resendCode', this.registerForm.email)
         this.message = 'Auth code Resent, Check your spam folder !'
         //change to confirm
       } catch(e) {
@@ -98,8 +98,8 @@ export default {
     },
     async login() {
       try {
-        await this.$store.dispatch('auth/login', this.loginForm)
-        let user = this.$store.getters['auth/getUser']
+        await this.$store.dispatch('awsAuth/login', this.loginForm)
+        let user = this.$store.getters['awsAuth/getUser']
         this.message = 'Success ! Redirecting...'
         setTimeout(() => {
           this.$store.commit('modal/setModalActive')
@@ -113,7 +113,7 @@ export default {
     },
     async register() {
       try {
-        await this.$store.dispatch('auth/register', this.registerForm)
+        await this.$store.dispatch('awsAuth/register', this.registerForm)
         this.confirmForm.email = this.registerForm.email
         this.theFunction = 'confirm'
         this.message = `Success ! Your auth was emailed to you.`
@@ -124,10 +124,9 @@ export default {
     },
     async confirm() {
       try {
-        await this.$store.dispatch('auth/confirmRegistration', this.confirmForm)
-        await this.$store.dispatch('auth/login', this.registerForm)
-        let user = this.$store.getters['auth/getUser']
-        console.log(user)
+        await this.$store.dispatch('awsAuth/confirmRegistration', this.confirmForm)
+        await this.$store.dispatch('awsAuth/login', this.registerForm)
+        let user = this.$store.getters['awsAuth/getUser']
         this.message = 'Success - you have been confirmed. Redirecting...'
         setTimeout(() => {
           this.$store.commit('modal/setModalActive')
