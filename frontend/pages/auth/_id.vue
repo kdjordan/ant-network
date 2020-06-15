@@ -21,7 +21,7 @@
 import { Auth } from 'aws-amplify'
 export default {
     transition: 'fade',
-    middleware: 'auth-admin',
+    // middleware: 'auth-admin',
     layout: "dealerProfile",
     data() {
         return {
@@ -46,18 +46,26 @@ export default {
     async mounted() {
         try {
             const user = await Auth.currentAuthenticatedUser()
+            const info = await Auth.currentUserInfo()
+            const session = await Auth.currentSession()
             this.$store.commit('awsAuth/set', user)
-            console.log("Logged IN", this.$store.getters['awsAuth/isAuthenticated'])
-            // let user = this.$store.getters['awsAuth/getUser']
-            console.log(user)
+
+            console.log('User', user)
+            console.log('Info', info)
+            console.log('Sessioin', session)
             
-            // console.log("JWT", jwt)
-            // let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
-            // { headers: { Authorization: `Bearer ${jwt}` } })
+            const jwt = session.accessToken.jwtToken 
             
-            // this.profile = profile.data.profile.Items[0]
+            console.log("user ", user)
+            
+            console.log("JWT", jwt)
+            let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
+            { headers: { Authorization: `Bearer ${jwt}` } })
+            
+            this.profile = profile.data.profile.Items[0]
         } catch(e) {
             console.log(e)
+            this.$router.push('/')
         }
     }
 

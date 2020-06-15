@@ -47,13 +47,13 @@ functions:
     handler: src/lambda/auth/auth.handler
 
   # TODO: Configure this function
-  GetImages:
-    handler: src/lambda/http/getImages.handler
+  GetProfile:
+    handler: src/lambda/http/getProfile.handler
     events:
       - http:
-          # authorizer: Auth
+          authorizer: Auth
           method: get
-          path: dealer
+          path: profile
           cors: true
     iamRoleStatements:
       - Effect: Allow

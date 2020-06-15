@@ -23,6 +23,7 @@ provider:
   environment:
     PROFILE_TABLE: Profile-${self:provider.stage}
     DEALERS_IMAGES_BUCKET: ant-images-${self:provider.stage}
+    USER_POOL_ID: us-west-2_PFBKCwfbt
     SIGNED_URL_EXPIRATION: 300
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     
@@ -38,11 +39,14 @@ provider:
   
 
 functions:
+  Auth:
+    handler: src/lambda/auth/authorizer.handler
 
   SignUp:
     handler: src/lambda/http/signUp.handler
     events:
       - http:
+          authorizer: Auth
           method: post
           path: signup
           cors: true
@@ -51,6 +55,7 @@ functions:
     handler: src/lambda/http/getProfile.handler
     events:
       - http:
+          authorizer: Auth
           method: get
           path: profile
           cors: true
