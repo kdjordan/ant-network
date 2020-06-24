@@ -59,22 +59,22 @@ export const handler = async (event: CustomAuthorizerEvent): Promise<CustomAutho
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   try {
     const token = getToken(authHeader)
-    console.log("Here's the token", token)
+    // console.log("Here's the token", token)
     
     const jwt: Jwt = decode(token, { complete: true }) as Jwt
     let jsonKeys = await Axios.get(url)
 
     console.log("The Keys are", jsonKeys.data.keys)
-    console.log("JWK", jsonKeys.data)
+    // console.log("JWK", jsonKeys.data)
 
-    console.log("The Kid is", jwt.header.kid)
+    // console.log("The Kid is", jwt.header.kid)
     
     
     let key = jsonKeys.data.keys.filter(key => key.kid === jwt.header.kid)
-    console.log("The key here", key)
+    // console.log("The key here", key)
     let pem = jwkToPem(key[0]);
   
-    console.log("The pem keys here", pem)
+    // console.log("The pem keys here", pem)
 
   
     // let cert = `-----BEGIN CERTIFICATE-----\n${signingKeys["0"].n}\n-----END CERTIFICATE-----`
