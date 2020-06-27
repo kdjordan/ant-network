@@ -20,6 +20,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-west-2'}
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
   environment:
     PROFILE_TABLE: Profile-${self:provider.stage}
     DEALERS_IMAGES_BUCKET: ant-images-${self:provider.stage}

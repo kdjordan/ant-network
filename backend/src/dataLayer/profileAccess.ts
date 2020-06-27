@@ -1,47 +1,50 @@
-import * as AWS  from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
+// import * as AWS  from 'aws-sdk'
+// import * as AWSXRay from 'aws-xray-sdk'
+const AWSXRay = require('aws-xray-sdk-core');
+const XAWS = AWSXRay.captureAWS(require('aws-sdk'));
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
-const XAWS = AWSXRay.captureAWS(AWS)
-const s3 = new XAWS.S3({
-    signatureVersion: 'v4'
-  })
+// const XAWS = AWSXRay.captureAWS(AWS)
+// const s3 = new XAWS.S3({
+//     signatureVersion: 'v4'
+//   })
 
-// import { TodoItem } from '../models/TodoItem'
+import { ProfileItem } from '../models/ProfileItem'
 // import { TodoUpdate } from '../models/TodoUpdate'
 // import { User } from '../models/User'
 
-export class TodoAccess {
+export class ProfileAccess {
  
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
-    private readonly todosTable = process.env.PROFILE_TABLE,
+    private readonly profileTable = process.env.PROFILE_TABLE
     // private readonly usersTable = process.env.USERS_TABLE,
-    private readonly imagesBucket = process.env.DEALERS_IMAGES_BUCKET,
-    private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION ) {
+    // private readonly imagesBucket = process.env.DEALERS_IMAGES_BUCKET,
+    // private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION 
+    ) {
   }
 
-//   async getSignedUrl(todoId: string, userId: string): Promise<any> {
-//       try {
-//         let imageUrl = createAttachmentUrl(this.imagesBucket, todoId)
+  // async getSignedUrl(dealerId: string, adminId: string): Promise<any> {
+  //     try {
+  //       let imageUrl = createAttachmentUrl(this.imagesBucket, dealerId)
 
-//         const uploadUrl = s3.getSignedUrl('putObject', {
-//             Bucket: this.imagesBucket,
-//             Key: todoId,
-//             Expires: Number(this.urlExpiration)
-//         })
+  //       const uploadUrl = s3.getSignedUrl('putObject', {
+  //           Bucket: this.imagesBucket,
+  //           Key: dealerId,
+  //           Expires: Number(this.urlExpiration)
+  //       })
 
-//         await this.updateUrl(imageUrl, todoId, userId)
+  //       await this.updateUrl(imageUrl, adminId, dealerId)
     
-//         return {
-//             uploadUrl,
-//             imageUrl
-//         }
-//       } catch (e) {
-//         console.log("ERROR getting url in ACCESS", e);
+  //       return {
+  //           uploadUrl,
+  //           imageUrl
+  //       }
+  //     } catch (e) {
+  //       console.log("ERROR getting url in ACCESS", e);
         
-//       }
-//   }
+  //     }
+  // }
 
 //   async checkUserExists(userId: string): Promise<User> {
 //     try {
@@ -86,22 +89,22 @@ export class TodoAccess {
 
 //   }
 
-//    async getAllTodos(userId: string): Promise<TodoItem[]> {
-//     try {
-//         let todos = await this.docClient.query({
-//            TableName: this.todosTable,
-//            KeyConditionExpression: 'userId = :id',
-//            ExpressionAttributeValues: {
-//                ':id': userId
-//            }
-//        }).promise()
-   
-//         const items = todos.Items
-//         return items as TodoItem[]
-//     } catch (e) {
-//         console.log("ERROR getting todos in ACCESS", e)
-//     }
-//    }
+   async getProfile(dealerId: string): Promise<ProfileItem[]> {
+    try {
+        let profile = await this.docClient.query({
+           TableName: this.profileTable,
+           KeyConditionExpression: 'dealerId = :id',
+           ExpressionAttributeValues: {
+               ':id': dealerId
+           }
+       }).promise()
+       console.log(profile)
+        const items = profile.Items
+        return items as ProfileItem[]
+    } catch (e) {
+        console.log("ERROR getting todos in ACCESS", e)
+    }
+   }
 
 //    async createTodo(todoItem: TodoItem): Promise<TodoItem> {
 //        try {
@@ -163,34 +166,34 @@ export class TodoAccess {
 //         console.log("ERROR deleting TODO in ACCESS")
 //        }
 //     }
-//     // TODO UPDATE todos Table with attachment URL
-//     async updateUrl(url: string, todoId: string, userId: string) {
-//         try {   
-//             await this.docClient.update({
-//                 TableName: this.todosTable,
-//                 Key: {
-//                     userId,
-//                     todoId
-//                 },
-//                 UpdateExpression: "set #attach = :a",
-//                 ExpressionAttributeValues: {
-//                   ":a": url,
+    // TODO UPDATE todos Table with attachment URL
+    // async updateUrl(url: string, todoId: string, userId: string) {
+    //     try {   
+    //         await this.docClient.update({
+    //             TableName: this.profileTable,
+    //             Key: {
+    //                 userId,
+    //                 todoId
+    //             },
+    //             UpdateExpression: "set #attach = :a",
+    //             ExpressionAttributeValues: {
+    //               ":a": url,
                   
-//                 },
-//                 ExpressionAttributeNames: {
-//                   "#attach": 'attachmentUrl',
-//                 },
-//                  ReturnValues:"UPDATED_NEW"
+    //             },
+    //             ExpressionAttributeNames: {
+    //               "#attach": 'attachmentUrl',
+    //             },
+    //              ReturnValues:"UPDATED_NEW"
 
-//             }).promise()
-//         } catch (e) {
-//             console.log("ERROR in updateURL ", e);
+    //         }).promise()
+    //     } catch (e) {
+    //         console.log("ERROR in updateURL ", e);
             
-//         }
+    //     }
 
-//     }
+    // }
     
-}
+}//end constructor
 
 
 function createDynamoDBClient() {
@@ -205,7 +208,7 @@ function createDynamoDBClient() {
   return new XAWS.DynamoDB.DocumentClient()
 }
 
-function createAttachmentUrl(bucketName: string, todoId: string): string {
-    return `https://${bucketName}.s3.amazonaws.com/${profileId}`
-}
+// function createAttachmentUrl(bucketName: string, profileId: string): string {
+//     return `https://${bucketName}.s3.amazonaws.com/${profileId}`
+// }
 

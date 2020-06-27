@@ -65,10 +65,6 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
     let jsonKeys = await Axios.get(url)
 
     console.log("The Keys are", jsonKeys.data.keys)
-    // console.log("JWK", jsonKeys.data)
-
-    // console.log("The Kid is", jwt.header.kid)
-    
     
     let key = jsonKeys.data.keys.filter(key => key.kid === jwt.header.kid)
     // console.log("The key here", key)

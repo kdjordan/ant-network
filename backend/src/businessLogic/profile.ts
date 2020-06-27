@@ -1,28 +1,33 @@
-import * as uuid from 'uuid'
+// import * as uuid from 'uuid'
 
 
-// import { TodoItem } from '../models/TodoItem'
+import { ProfileItem } from '../models/ProfileItem'
 // import { User } from '../models/User'
-import { TodoAccess } from '../dataLayer/todosAccess'
+import { ProfileAccess } from '../dataLayer/profileAccess'
 // import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 // import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-// import { getUserId } from '../lambda/utils'
+import { getTheDealerId } from '../lambda/utils'
 
 
-import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-// import { APIGatewayProxyEvent } from 'aws-lambda'
+// import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
+import { APIGatewayProxyEvent } from 'aws-lambda'
 
-// const todoAccess = new TodoAccess()
+const profileAccess = new ProfileAccess()
 
-export async function getSignedUrl(event: APIGatewayProxyEvent): Promise<String> {
-    const todoId = event.pathParameters.todoId
-    const userId = getUserId(event)
-    return await todoAccess.getSignedUrl(todoId, userId)
+// export async function getSignedUrl(event: APIGatewayProxyEvent): Promise<String> {
+//     const profileId = event.pathParameters.todoId
+//     const adminId = getAdminId(event)
+//     return await profileAccess.getSignedUrl(todoId, userId)
+// }
+
+export async function getProfile(dealerId: string): Promise<ProfileItem[]> {
+  return await profileAccess.getProfile(dealerId)
 }
 
-// export async function getAllTodos(userId: string): Promise<TodoItem[]> {
-//   return await todoAccess.getAllTodos(userId)
-// }
+export async function getDealerId(event: APIGatewayProxyEvent): Promise<string> {
+  return getTheDealerId(event)
+  
+}
 
 // export async function checkUserExists(event: APIGatewayProxyEvent): Promise<User> {
 //     const userId = getUserId(event)
