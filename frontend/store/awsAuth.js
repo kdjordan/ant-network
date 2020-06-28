@@ -1,6 +1,7 @@
 import { Auth } from 'aws-amplify'
 
 
+
 export const state = () => ({
     isAuthenticated: false,
     user: null
@@ -53,7 +54,9 @@ export const actions = {
     },
 
     async confirmRegistration(_, { email, code}) {
-        return await Auth.confirmSignUp(email, code)
+        //confirm signUp and then add user profile to dynamoDb
+        return await Auth.confirmSignUp(email, code) 
+        console.log('back from confirm', user)
     },
 
     async login({ commit }, { email, password}) {

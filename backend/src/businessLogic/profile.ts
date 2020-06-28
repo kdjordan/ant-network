@@ -2,7 +2,7 @@
 
 
 import { ProfileItem } from '../models/ProfileItem'
-// import { User } from '../models/User'
+import { Dealer } from '../models/Dealer'
 import { ProfileAccess } from '../dataLayer/profileAccess'
 // import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 // import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
@@ -29,10 +29,10 @@ export async function getDealerId(event: APIGatewayProxyEvent): Promise<string> 
   
 }
 
-// export async function checkUserExists(event: APIGatewayProxyEvent): Promise<User> {
-//     const userId = getUserId(event)
-//     return await todoAccess.checkUserExists(userId)
-// }
+export async function checkDealerExists(event: APIGatewayProxyEvent): Promise<Dealer> {
+    const dealerId = getTheDealerId(event)
+    return await profileAccess.checkDealerExists(dealerId)
+}
 
 // export async function addUser(userId: string): Promise<User> {
 //   return await todoAccess.addUser(userId)

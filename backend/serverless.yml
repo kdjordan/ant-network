@@ -50,7 +50,6 @@ functions:
     handler: src/lambda/http/signUp.handler
     events:
       - http:
-          authorizer: Auth
           method: post
           path: signup
           cors: true

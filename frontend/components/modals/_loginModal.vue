@@ -128,6 +128,13 @@ export default {
         await this.$store.dispatch('awsAuth/login', this.registerForm)
         let user = this.$store.getters['awsAuth/getUser']
         this.message = 'Success - you have been confirmed. Redirecting...'
+        //remmove password for security
+        delete this.registerForm['password']
+        console.log('in login modal')
+        let data = await this.$axios.$post(`${process.env.API_ENDPOINT}`,{
+                ...this.registerForm
+            })
+        console.log('back from call ', data)    
         setTimeout(() => {
           this.$store.commit('modal/setModalActive')
           this.message = ''
@@ -139,6 +146,7 @@ export default {
       }    
     }
   }
+  
 }
 </script>
 

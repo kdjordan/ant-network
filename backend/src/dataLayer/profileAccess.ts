@@ -11,7 +11,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { ProfileItem } from '../models/ProfileItem'
 // import { TodoUpdate } from '../models/TodoUpdate'
-// import { User } from '../models/User'
+import { Dealer } from '../models/Dealer'
 
 export class ProfileAccess {
  
@@ -46,25 +46,25 @@ export class ProfileAccess {
   //     }
   // }
 
-//   async checkUserExists(userId: string): Promise<User> {
-//     try {
-//         const result = await this.docClient.query({
-//             TableName: this.usersTable,
-//             KeyConditionExpression: 'id = :id',
-//             ExpressionAttributeValues: { ':id': userId }
-//         }).promise()
+  async checkDealerExists(dealerId: string): Promise<Dealer> {
+    try {
+        const result = await this.docClient.query({
+            TableName: this.profileTable,
+            KeyConditionExpression: 'dealerId = :id',
+            ExpressionAttributeValues: { ':id': dealerId }
+        }).promise()
         
-//         const theUser = {
-//             count: result.Count,
-//             id: userId
-//         }
-//       return theUser
+        const theUser = {
+            count: result.Count,
+            id: dealerId
+        }
+      return theUser
   
-//     } catch (e) {
-//       console.log("ERROR checking user in ACCESS", e);
-//     }
+    } catch (e) {
+      console.log("ERROR checking user in ACCESS", e);
+    }
     
-//   }
+  }
 
 //   async addUser(userId: string): Promise<User> {
 //       //add User to Users Table

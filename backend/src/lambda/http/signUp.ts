@@ -1,13 +1,20 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-// import { getAllTodos, checkUserExists, addUser } from '../../businessLogic/profile'
+import { checkDealerExists, addUser } from '../../businessLogic/profile'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(event)
   try {
     // // check to see if user exists in Users table
-    // let theUser = await checkUserExists(event)
+    let profile = await checkDealerExists(event)
+    //if we have a user return
+    if(theUser) {
+
+    } else {
+      //add user to ProfileTable
+      let user = await addDealer(event)
+    }
     // let todos = []
 
     // // if so, get any todos they have
