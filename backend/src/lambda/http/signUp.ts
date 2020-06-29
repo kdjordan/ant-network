@@ -9,7 +9,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     // // check to see if user exists in Users table
     let profile = await checkDealerExists(event)
     //if we have a user return
-    if(theUser) {
+    if(profile) {
 
     } else {
       //add user to ProfileTable

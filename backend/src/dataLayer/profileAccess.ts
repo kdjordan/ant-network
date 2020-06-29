@@ -54,11 +54,12 @@ export class ProfileAccess {
             ExpressionAttributeValues: { ':id': dealerId }
         }).promise()
         
-        const theUser = {
+        const theDealer = {
             count: result.Count,
-            id: dealerId
+            dealerId,
+            adminId: result.adminId
         }
-      return theUser
+      return theDealer
   
     } catch (e) {
       console.log("ERROR checking user in ACCESS", e);

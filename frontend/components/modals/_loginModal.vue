@@ -2,11 +2,10 @@
   
   <div class="inner-modal">
       <h2 class="inner-modal__title font-reduce">Login / Register</h2>
-      {{theFunction}}
       <div v-if="theFunction == 'confirm'" class="inner-modal__desc center secondary-color" >{{message}}<br/> 
         Click <span @click.prevent="resendCode" class="under">here</span> to resend the code
       </div>
-      <div v-else class="inner-modal__desc center secondary-color" >{{message}}</div>
+      <div v-else class="inner-modal__desc center" >{{message}}</div>
         <!-- signup -->
         <div v-if="theFunction == 'register'" class="form-container">
           <form @submit.prevent="register" class="login-form">
@@ -116,7 +115,7 @@ export default {
         await this.$store.dispatch('awsAuth/register', this.registerForm)
         this.confirmForm.email = this.registerForm.email
         this.theFunction = 'confirm'
-        this.message = `Success ! Your auth was emailed to you.`
+        this.message = `Success ! Your CODE was emailed to you.`
       } catch (e) {
         this.message = `Error: ${e.message}`
         console.log("ERROR in register", e) 
@@ -125,21 +124,22 @@ export default {
     async confirm() {
       try {
         await this.$store.dispatch('awsAuth/confirmRegistration', this.confirmForm)
-        await this.$store.dispatch('awsAuth/login', this.registerForm)
-        let user = this.$store.getters['awsAuth/getUser']
-        this.message = 'Success - you have been confirmed. Redirecting...'
+        // await this.$store.dispatch('awsAuth/login', this.registerForm)
+        // let user = this.$store.getters['awsAuth/getUser']
+        // this.message = 'Success - you have been confirmed. Redirecting...'
         //remmove password for security
-        delete this.registerForm['password']
+        // delete this.registerForm['password']
         console.log('in login modal')
-        let data = await this.$axios.$post(`${process.env.API_ENDPOINT}`,{
-                ...this.registerForm
-            })
-        console.log('back from call ', data)    
-        setTimeout(() => {
-          this.$store.commit('modal/setModalActive')
-          this.message = ''
-          this.$router.push(`/auth/${user.attributes['custom:shopName']}`)
-        }, 3000)
+        // let data = await this.$axios.$post(`${process.env.API_ENDPOINT}`,{
+        //         ...this.registerForm
+        //     })
+        this.theFunction = 'login'
+        this.message = `You are verified. Login to continue`
+        // setTimeout(() => {
+          // this.$store.commit('modal/setModalActive')
+        //   this.message = ''
+        //   this.$router.push(`/auth/${user.attributes['custom:shopName']}`)
+        // }, 3000)
       } catch (e){
         this.message = `Error: ${e.message}`
         console.log("ERROR in confirm", e) 
