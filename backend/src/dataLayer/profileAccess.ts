@@ -46,20 +46,21 @@ export class ProfileAccess {
   //     }
   // }
 
-  async checkDealerExists(dealerId: string): Promise<Dealer> {
+  async checkDealerExists(adminId: string): Promise<boolean> {
     try {
-        const result = await this.docClient.query({
+      console.log("adminID", adminId)
+        let result = await this.docClient.query({
             TableName: this.profileTable,
-            KeyConditionExpression: 'dealerId = :id',
-            ExpressionAttributeValues: { ':id': dealerId }
+            KeyConditionExpression: 'adminId = :id',
+            ExpressionAttributeValues: { ':id': adminId }
         }).promise()
+        console.log("result", result);
         
-        const theDealer = {
-            count: result.Count,
-            dealerId,
-            adminId: result.adminId
+        if(result) {
+          return true
+        } else {
+          return false
         }
-      return theDealer
   
     } catch (e) {
       console.log("ERROR checking user in ACCESS", e);
@@ -67,28 +68,30 @@ export class ProfileAccess {
     
   }
 
-//   async addUser(userId: string): Promise<User> {
-//       //add User to Users Table
-//       try {
-//         const newId = { id: userId }
+  async addAdmin(userId: string): Promise<Dealer> {
+      //add User to Users Table
+      try {
+        const newId = { id: userId }
 
-//         await this.docClient.put({
-//             TableName: this.usersTable,
-//             Item: newId
-//         }).promise()
+        await this.docClient.put({
+            TableName: this.profileTable,
+            Item: newId
+        }).promise()
 
-//         let user = {
-//             count: 0,
-//             id: newId.id
-//         }
+        let user = {
+            count: 0,
+            dealerId: newId.id,
+            adminId: newId.id
 
-//         return user
+        }
 
-//       } catch (e) {
-//           console.log("ERROR adding user in ACCESS", e)
-//       }
+        return user
 
-//   }
+      } catch (e) {
+          console.log("ERROR adding user in ACCESS", e)
+      }
+
+  }
 
    async getProfile(dealerId: string): Promise<ProfileItem[]> {
     try {

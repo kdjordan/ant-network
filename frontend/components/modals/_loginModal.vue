@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { Auth } from 'aws-amplify'
 export default {
   data() {
     return {
@@ -100,6 +101,19 @@ export default {
         await this.$store.dispatch('awsAuth/login', this.loginForm)
         let user = this.$store.getters['awsAuth/getUser']
         this.message = 'Success ! Redirecting...'
+        //check to see if dealer exists
+        const authUser = await Auth.currentAuthenticatedUser()
+        const session = await Auth.currentSession()
+        console.log("authUser", authUser)
+        console.log("session", session)
+        let userExists = await this.$axios.get(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/checkDealer/${authUser.username}`, 
+                { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
+            })
+        console.log("user", userExists)
+        if(!userExists) {
+          //add user to DB
+        } 
+        // console.log('addedUser', addedUser)
         setTimeout(() => {
           this.$store.commit('modal/setModalActive')
           this.message = ''
@@ -124,22 +138,8 @@ export default {
     async confirm() {
       try {
         await this.$store.dispatch('awsAuth/confirmRegistration', this.confirmForm)
-        // await this.$store.dispatch('awsAuth/login', this.registerForm)
-        // let user = this.$store.getters['awsAuth/getUser']
-        // this.message = 'Success - you have been confirmed. Redirecting...'
-        //remmove password for security
-        // delete this.registerForm['password']
-        console.log('in login modal')
-        // let data = await this.$axios.$post(`${process.env.API_ENDPOINT}`,{
-        //         ...this.registerForm
-        //     })
         this.theFunction = 'login'
         this.message = `You are verified. Login to continue`
-        // setTimeout(() => {
-          // this.$store.commit('modal/setModalActive')
-        //   this.message = ''
-        //   this.$router.push(`/auth/${user.attributes['custom:shopName']}`)
-        // }, 3000)
       } catch (e){
         this.message = `Error: ${e.message}`
         console.log("ERROR in confirm", e) 

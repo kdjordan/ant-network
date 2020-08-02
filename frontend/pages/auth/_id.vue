@@ -50,22 +50,25 @@ export default {
             const session = await Auth.currentSession()
             this.$store.commit('awsAuth/set', user)
 
-            console.log('User', user)
-            console.log('Info', info)
-            console.log('Sessioin', session)
+            // console.log('User', user)
+            // console.log('Info', info)
+            // console.log('Session', session)
             
             const jwt = session.accessToken.jwtToken 
             
-            console.log("user ", user)
+            // console.log("user ", user.attributes['custom:shopName'])
+            let shopName = user.attributes['custom:shopName']
             
-            console.log("JWT", jwt)
-            let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile',
-            { headers: { Authorization: `Bearer ${jwt}` } })
-            
+            // console.log("JWT", jwt)
+            let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile/`${shopName}`',
+                { headers: { 'Authorization': `Bearer ${jwt}`} 
+            })
+
+        //    console.log(profile)
             this.profile = profile.data.profile.Items[0]
         } catch(e) {
-            console.log(e)
-            this.$router.push('/')
+            console.log("Error", `${e.message}`)
+            // this.$router.push('/')
         }
     }
 

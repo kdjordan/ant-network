@@ -29,14 +29,13 @@ export async function getDealerId(event: APIGatewayProxyEvent): Promise<string> 
   
 }
 
-export async function checkDealerExists(event: APIGatewayProxyEvent): Promise<Dealer> {
-    const dealerId = getTheDealerId(event)
-    return await profileAccess.checkDealerExists(dealerId)
+export async function checkDealerExists(adminId: string): Promise<boolean> {
+    return await profileAccess.checkDealerExists(adminId)
 }
 
-// export async function addUser(userId: string): Promise<User> {
-//   return await todoAccess.addUser(userId)
-// }
+export async function addAdmin(adminId: string): Promise<Dealer> {
+  return await profileAccess.addAdmin(adminId)
+}
 
 // export async function createTodo(event: APIGatewayProxyEvent): Promise<TodoItem> {
 //     const newTodo: CreateTodoRequest = JSON.parse(event.body)

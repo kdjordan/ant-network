@@ -45,6 +45,15 @@ provider:
 functions:
   Auth:
     handler: src/lambda/auth/authorizer.handler
+  
+  CheckDealerExists:
+    handler: src/lambda/http/checkDealerExists.handler
+    events:
+      - http:
+          authorizer: Auth
+          method: get
+          path: checkDealer/{adminId}
+          cors: true
 
   SignUp:
     handler: src/lambda/http/signUp.handler
@@ -60,7 +69,7 @@ functions:
       - http:
           authorizer: Auth
           method: get
-          path: profile
+          path: profile/{profileName}
           cors: true
     
 
