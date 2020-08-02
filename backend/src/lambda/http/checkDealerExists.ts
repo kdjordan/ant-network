@@ -9,11 +9,13 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log(event)
   try {
     //get admin ID from event
-    // let exists = await checkDealerExists(event)
+    let addDealer = false
     console.log('in CDE', event.pathParameters.adminId)
     let dealerExists = await checkDealerExists(event.pathParameters.adminId)
-    console.log(dealerExists)
-    // if(!exists) {}
+    console.log('dealerExists', dealerExists)
+    if(!dealerExists) {
+      addDealer = true
+    }
 
     //check if admin matches shop adminId
 
@@ -46,7 +48,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         'Access-Control-Allow-Credentials': true
 
       },
-      body: JSON.stringify({data: `true`})
+      body: JSON.stringify({data: `${addDealer}`})
     }
    
   } catch (e) {

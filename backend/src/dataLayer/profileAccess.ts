@@ -56,10 +56,10 @@ export class ProfileAccess {
         }).promise()
         console.log("result", result);
         
-        if(result) {
-          return true
-        } else {
+        if(result.Count == 0) {
           return false
+        } else {
+          return true
         }
   
     } catch (e) {
@@ -68,7 +68,7 @@ export class ProfileAccess {
     
   }
 
-  async addAdmin(userId: string): Promise<Dealer> {
+  async addDealer(userId: string): Promise<Dealer> {
       //add User to Users Table
       try {
         const newId = { id: userId }

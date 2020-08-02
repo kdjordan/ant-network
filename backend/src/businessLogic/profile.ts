@@ -33,8 +33,8 @@ export async function checkDealerExists(adminId: string): Promise<boolean> {
     return await profileAccess.checkDealerExists(adminId)
 }
 
-export async function addAdmin(adminId: string): Promise<Dealer> {
-  return await profileAccess.addAdmin(adminId)
+export async function addDealer(adminId: string): Promise<Dealer> {
+  return await profileAccess.addDealer(adminId)
 }
 
 // export async function createTodo(event: APIGatewayProxyEvent): Promise<TodoItem> {

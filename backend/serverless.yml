@@ -91,15 +91,16 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: dealerId #uuid
+          - AttributeName: adminId #uuid
             AttributeType: S
-          - AttributeName: adminId #cognitoUserId
+          - AttributeName: shopName #cognitoUserId
             AttributeType: S
         KeySchema:
-          - AttributeName: dealerId
-            KeyType: HASH
           - AttributeName: adminId
+            KeyType: HASH
+          - AttributeName: shopName
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.PROFILE_TABLE}
-        
+
+    

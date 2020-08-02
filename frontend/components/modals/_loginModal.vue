@@ -110,10 +110,14 @@ export default {
                 { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
             })
         console.log("user", userExists)
-        if(!userExists) {
+        if(userExists.data) {
           //add user to DB
-        } 
+          console.log('take state info and add to Profile Table')
+          let addedDealer = await this.$axios.post(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/addDealer/${authUser.username}`, 
+                { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
+              })
         // console.log('addedUser', addedUser)
+        }
         setTimeout(() => {
           this.$store.commit('modal/setModalActive')
           this.message = ''
