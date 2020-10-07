@@ -1,24 +1,30 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-// import { checkDealerExists, addAdmin } from '../../businessLogic/profile'
-
-// import uuid from 'uuid'
-
+import { checkProfileExists, addProfile } from '../../businessLogic/profile'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    console.log(event)
   try {
-    // // check to see if user exists in Users table
-    // let profile = await checkDealerExists(event)
+    // // check to see if user exists in Profile table
+    const body = JSON.parse(event.body);
+    let profile = await checkProfileExists(body.adminID)
+    console.log(profile)
     //if we have a user return
-    // if(profile) {
-
-    // } else {
-    //   let adminId = uuid.v4()
-    //   //add user to ProfileTable
-    //   let user = await addAdmin(adminId)
-    //   console.log(user);
+    if(profile) {
+      console.log('user exists in profile table')
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+          body: JSON.stringify({items: profile})
+      }
+    } else {
+      //add user to ProfileTable
+      console.log('adding user to profile table')
+      let user = await addProfile(body.adminID, body.shopName)
+      console.log("user after adding to profile table", user);
       
     // }
     // let todos = []
@@ -29,8 +35,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     // } else {
     //   //add User to Users Table
     //   await addUser(theUser.id)
-    // }
-
     return {
       statusCode: 200,
       headers: {
@@ -38,11 +42,13 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         'Access-Control-Allow-Credentials': true
       },
     //   body: JSON.stringify({items: todos})
-        body: JSON.stringify({items: 'Hello lets sign up'})
+        body: JSON.stringify({items: user})
     }
+    }
+
    
   } catch (e) {
-      console.log("ERROR in getTodos", e);
+      console.log("ERROR adding Shop", e);
       
       return {
         statusCode: 502,

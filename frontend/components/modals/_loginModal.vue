@@ -101,6 +101,17 @@ export default {
         await this.$store.dispatch('awsAuth/login', this.loginForm)
         let user = this.$store.getters['awsAuth/getUser']
         this.message = 'Success ! Redirecting...'
+        if(user) {
+          console.log("user logged in", user)
+          const authUser = await Auth.currentAuthenticatedUser()
+          setTimeout(() => {
+            this.$store.commit('modal/setModalActive')
+            this.message = ''
+            this.$router.push(`/auth/${user.attributes['custom:shopName']}`)
+          }, 2000)
+          return
+        }
+
         //check to see if dealer exists
         const authUser = await Auth.currentAuthenticatedUser()
         const session = await Auth.currentSession()
@@ -113,10 +124,14 @@ export default {
         if(userExists.data) {
           //add user to DB
           console.log('take state info and add to Profile Table')
-          let addedDealer = await this.$axios.post(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/addDealer/${authUser.username}`, 
-                { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
-              })
-        // console.log('addedUser', addedUser)
+          let addedDealer = await this.$axios.post(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/signup`,
+              { 
+                adminID: authUser.attributes.sub,
+                shopName: 'kjshop'
+              },
+              { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
+          })
+        console.log('addedUser', addedUser)
         }
         setTimeout(() => {
           this.$store.commit('modal/setModalActive')

@@ -29,12 +29,12 @@ export async function getDealerId(event: APIGatewayProxyEvent): Promise<string> 
   
 }
 
-export async function checkDealerExists(adminId: string): Promise<boolean> {
-    return await profileAccess.checkDealerExists(adminId)
+export async function checkProfileExists(adminId: string): Promise<boolean> {
+    return await profileAccess.checkProfileExists(adminId)
 }
 
-export async function addDealer(adminId: string): Promise<Dealer> {
-  return await profileAccess.addDealer(adminId)
+export async function addProfile(adminId: string, shopName: string): Promise<Dealer> {
+  return await profileAccess.addProfile(adminId, shopName)
 }
 
 // export async function createTodo(event: APIGatewayProxyEvent): Promise<TodoItem> {

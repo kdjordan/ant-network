@@ -46,9 +46,9 @@ export class ProfileAccess {
   //     }
   // }
 
-  async checkDealerExists(adminId: string): Promise<boolean> {
+  async checkProfileExists(adminId: string): Promise<boolean> {
     try {
-      console.log("adminID", adminId)
+      console.log("adminID is", adminId)
         let result = await this.docClient.query({
             TableName: this.profileTable,
             KeyConditionExpression: 'adminId = :id',
@@ -68,24 +68,25 @@ export class ProfileAccess {
     
   }
 
-  async addDealer(userId: string): Promise<Dealer> {
+  async addProfile(adminId: string, shopName: string): Promise<Dealer> {
       //add User to Users Table
+      console.log('adminID', adminId)
+      console.log('shopName', shopName)
       try {
-        const newId = { id: userId }
-
+        const newId = { adminId, shopName}
+        console.log('newId', newId)
         await this.docClient.put({
             TableName: this.profileTable,
             Item: newId
         }).promise()
 
-        let user = {
-            count: 0,
-            dealerId: newId.id,
-            adminId: newId.id
+        let profile = {
+            adminId: newId.adminId,
+            shopName: newId.shopName
 
         }
 
-        return user
+        return profile
 
       } catch (e) {
           console.log("ERROR adding user in ACCESS", e)

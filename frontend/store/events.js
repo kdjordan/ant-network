@@ -15,6 +15,7 @@ export const state = () => ({
     },
 });
 
+
 export const getters = {   
     getDoSlide(state) {
         return state.doSlideRight 

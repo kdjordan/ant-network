@@ -1,7 +1,6 @@
 import { Auth } from 'aws-amplify'
 
 
-
 export const state = () => ({
     isAuthenticated: false,
     user: null
@@ -75,6 +74,7 @@ export const actions = {
     },
 
     async logout({ commit }) {
+        console.log('logging out')
         await Auth.signOut()
         if(process.client) {
             localStorage.clear()
