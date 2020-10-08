@@ -3,7 +3,7 @@
 
       <h1>Dealers  Page</h1>
       <!-- <h2>Logged in :  {{$auth.isAuthenticated}}</h2> -->
-      <h2>Welcome back {{profile.shopname}}</h2>
+      <h2>Welcome back {{getShopName}}</h2>
         <h4>Upload an image</h4>
       <form @submit.prevent>
           <input type="file" accept="image/*">
@@ -12,20 +12,22 @@
       </form>
       <button @click.prevent="details">Details</button>
         <h4>Your Images</h4>
-        {{profile}}
+        {{shopName}}
           <!-- image Grid v-for  -->
   </div>
 </template>
 
 <script>
 import { Auth } from 'aws-amplify'
+import { mapGetters } from 'vuex'
+
 export default {
     transition: 'fade',
     // middleware: 'auth-admin',
     layout: "dealerProfile",
     data() {
         return {
-            profile: '',
+            shopName: '',
             image: {
                 desc: ''
             }
@@ -38,34 +40,37 @@ export default {
         }
     },
     computed: {
-        getUser() {
-            // return this.$store.state.auth.user.attributes['custom:shopName']x
-            return 'bugaloo'
-        }
-    },
+    ...mapGetters({
+      getUserId: 'awsAuth/getUser',
+      getIsAuth: 'awsAuth/isAuthenticated',
+      getShopName: 'awsAuth/getShopName'
+    })
+  },
     async mounted() {
         try {
-            const user = await Auth.currentAuthenticatedUser()
-            const info = await Auth.currentUserInfo()
-            const session = await Auth.currentSession()
-            this.$store.commit('awsAuth/set', user)
+            console.log("we here", this.$store.state.awsAuth.user)
+            // this.shopName = 'test'
+            // const user = await Auth.currentAuthenticatedUser()
+            // const info = await Auth.currentUserInfo()
+            // const session = await Auth.currentSession()
+            // this.$store.commit('awsAuth/set', user)
 
             // console.log('User', user)
             // console.log('Info', info)
             // console.log('Session', session)
             
-            const jwt = session.accessToken.jwtToken 
+            // const jwt = session.accessToken.jwtToken 
             
             // console.log("user ", user.attributes['custom:shopName'])
-            let shopName = user.attributes['custom:shopName']
+            // let shopName = user.attributes['custom:shopName']
             
             // console.log("JWT", jwt)
-            let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile/`${shopName}`',
-                { headers: { 'Authorization': `Bearer ${jwt}`} 
-            })
+            // let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile/`${shopName}`',
+            //     { headers: { 'Authorization': `Bearer ${jwt}`} 
+            // })
 
         //    console.log(profile)
-            this.profile = profile.data.profile.Items[0]
+            // this.profile = profile.data.profile.Items[0]
         } catch(e) {
             console.log("Error", `${e.message}`)
             // this.$router.push('/')

@@ -15,13 +15,13 @@ export const mutations = {
 
 export const getters = {
     getUser(state) {
-        return state.user
+        return state.user.attributes.sub
     },
     isAuthenticated(state) {
         return state.isAuthenticated
     },
     getShopName(state) {
-        return state.user
+        return state.user.attributes['custom:shopName']
     }
 }
 
@@ -55,7 +55,6 @@ export const actions = {
     async confirmRegistration(_, { email, code}) {
         //confirm signUp and then add user profile to dynamoDb
         return await Auth.confirmSignUp(email, code) 
-        console.log('back from confirm', user)
     },
 
     async login({ commit }, { email, password}) {

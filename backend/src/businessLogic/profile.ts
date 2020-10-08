@@ -20,7 +20,7 @@ const profileAccess = new ProfileAccess()
 //     return await profileAccess.getSignedUrl(todoId, userId)
 // }
 
-export async function getProfile(dealerId: string): Promise<ProfileItem[]> {
+export async function getDealer(dealerId: string): Promise<ProfileItem[]> {
   return await profileAccess.getProfile(dealerId)
 }
 
@@ -29,7 +29,7 @@ export async function getDealerId(event: APIGatewayProxyEvent): Promise<string> 
   
 }
 
-export async function checkProfileExists(adminId: string): Promise<boolean> {
+export async function checkDealerExists(adminId: string): Promise<boolean> {
     return await profileAccess.checkProfileExists(adminId)
 }
 

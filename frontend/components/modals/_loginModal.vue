@@ -96,51 +96,54 @@ export default {
           console.log("ERROR resending code ", e) 
       }
     },
+
+
+
+
     async login() {
       try {
+        console.log('logging in')
         await this.$store.dispatch('awsAuth/login', this.loginForm)
-        let user = this.$store.getters['awsAuth/getUser']
-        this.message = 'Success ! Redirecting...'
-        if(user) {
-          console.log("user logged in", user)
-          const authUser = await Auth.currentAuthenticatedUser()
+        //get current session and user information
+        const session = await Auth.currentSession()
+        const authUser = await Auth.currentAuthenticatedUser()
+
+        //check to see if dealer exists in Profile DB
+        console.log("the user is ", authUser)
+        let userExists = await this.$axios.get(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/checkDealer/${authUser.username}`, 
+                { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
+            })        
+        //if userExists is true we can forward them to their admin page
+        //if userExists is false - we first need to populate the Profile DB with their info
+        if(userExists.data.data) {
+          this.message = 'Success ! Redirecting...'
           setTimeout(() => {
             this.$store.commit('modal/setModalActive')
             this.message = ''
-            this.$router.push(`/auth/${user.attributes['custom:shopName']}`)
+            this.$router.push(`/auth/${authUser.attributes['custom:shopName']}`)
           }, 2000)
-          return
-        }
-
-        //check to see if dealer exists
-        const authUser = await Auth.currentAuthenticatedUser()
-        const session = await Auth.currentSession()
-        console.log("authUser", authUser)
-        console.log("session", session)
-        let userExists = await this.$axios.get(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/checkDealer/${authUser.username}`, 
+        } else {
+          //get dealer info from vuex
+          let user = this.$store.getters['awsAuth/getUser']
+          //add user to DB
+          let addedDealer = await this.$axios.post(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/signup`,
+                { 
+                  adminID: authUser.attributes.sub,
+                  shopName: authUser.attributes['custom:shopName']
+                },
                 { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
             })
-        console.log("user", userExists)
-        if(userExists.data) {
-          //add user to DB
-          console.log('take state info and add to Profile Table')
-          let addedDealer = await this.$axios.post(`https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/signup`,
-              { 
-                adminID: authUser.attributes.sub,
-                shopName: 'kjshop'
-              },
-              { headers: { 'Authorization': `Bearer ${session.accessToken.jwtToken}`} 
-          })
-        console.log('addedUser', addedUser)
+            console.log('added Dealer', addedDealer)
+            this.message = 'Success ! Redirecting...'
+            setTimeout(() => {
+              this.$store.commit('modal/setModalActive')
+              this.message = ''
+              this.$router.push(`/auth/${authUser.attributes['custom:shopName']}`)
+          }, 2000)
         }
-        setTimeout(() => {
-          this.$store.commit('modal/setModalActive')
-          this.message = ''
-          this.$router.push(`/auth/${user.attributes['custom:shopName']}`)
-        }, 2000)
       } catch (e) {
-        this.message = `Error: ${e.message}`
-        console.log("ERROR loggin in ", e) 
+          this.message = `Error: ${e.message}`
+          console.log("ERROR loggin in ", e) 
       }    
     },
     async register() {

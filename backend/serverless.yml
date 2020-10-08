@@ -64,13 +64,13 @@ functions:
           path: signup
           cors: true
 
-  GetProfile:
-    handler: src/lambda/http/getProfile.handler
+  GetDeaaler:
+    handler: src/lambda/http/getDealer.handler
     events:
       - http:
           authorizer: Auth
           method: get
-          path: profile/{profileName}
+          path: dealer/{dealerName}
           cors: true
     
 

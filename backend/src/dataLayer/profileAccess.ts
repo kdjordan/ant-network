@@ -56,7 +56,7 @@ export class ProfileAccess {
         }).promise()
         console.log("result", result);
         
-        if(result.Count == 0) {
+        if(result.Items.length == 0) {
           return false
         } else {
           return true

@@ -2,20 +2,20 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
-import { checkProfileExists } from '../../businessLogic/profile'
+import { checkDealerExists } from '../../businessLogic/profile'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(event.headers.Authorization)
     console.log(event)
   try {
     //get admin ID from event
-    let addDealer = false
+    
     console.log('in CDE', event.pathParameters.adminId)
-    let dealerExists = await checkProfileExists(event.pathParameters.adminId)
+    let dealerExists = await checkDealerExists(event.pathParameters.adminId)
     console.log('dealerExists', dealerExists)
-    if(!dealerExists) {
-      addDealer = true
-    }
+    // if(!dealerExists) {
+    //   addDealer = true
+    // }
 
     //check if admin matches shop adminId
 
@@ -48,7 +48,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         'Access-Control-Allow-Credentials': true
 
       },
-      body: JSON.stringify({data: `${addDealer}`})
+      body: JSON.stringify({data: dealerExists})
     }
    
   } catch (e) {

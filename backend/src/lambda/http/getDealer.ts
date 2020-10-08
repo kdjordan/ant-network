@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
 // import { getAllTodos, checkUserExists, addUser } from '../../businessLogic/profile'
-import { getProfile, getDealerId } from '../../businessLogic/profile'
+import { getDealer, getDealerId } from '../../businessLogic/profile'
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log(event.headers.Authorization)
@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     //check if admin matches shop adminId
 
     //get the profile
-    let profile = await getProfile(dealerId)
+    let profile = await getDealer(dealerId)
 
 
     // check to see if user exists in Users table
