@@ -15,13 +15,19 @@ export const mutations = {
 
 export const getters = {
     getUser(state) {
-        return state.user.attributes.sub
+        if(state.isAuthenticated) {
+            return state.user.attributes.sub
+        }
     },
     isAuthenticated(state) {
-        return state.isAuthenticated
+        if(state.isAuthenticated) {
+            return state.isAuthenticated
+        }
     },
     getShopName(state) {
-        return state.user.attributes['custom:shopName']
+        if(state.isAuthenticated) {
+            return state.user.attributes['custom:shopName']
+        }
     }
 }
 
@@ -29,10 +35,11 @@ export const actions = {
     async load({ commit }){
         try {
             console.log('loading in LOAD')
+            const test = await Auth.updateUserAttributes()
             const user = await Auth.currentAuthenticatedUser({bypassCache: true})
-            const {attributes} = user
-            console.log("USER")
-            console.log(user.attributes)
+            // const {attributes} = user
+            console.log("test", test)
+            console.log("user", user.attributes)
             commit('set', user)
             return user
         } catch (e) {
@@ -80,4 +87,5 @@ export const actions = {
         }
         commit('set', null)
     },
+    
 }

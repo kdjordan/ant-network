@@ -23,7 +23,7 @@ import { mapGetters } from 'vuex'
 
 export default {
     transition: 'fade',
-    // middleware: 'auth-admin',
+    middleware: 'auth-admin',
     layout: "dealerProfile",
     data() {
         return {
@@ -46,36 +46,19 @@ export default {
       getShopName: 'awsAuth/getShopName'
     })
   },
-    async mounted() {
-        try {
-            console.log("we here", this.$store.state.awsAuth.user)
-            // this.shopName = 'test'
-            // const user = await Auth.currentAuthenticatedUser()
-            // const info = await Auth.currentUserInfo()
-            // const session = await Auth.currentSession()
-            // this.$store.commit('awsAuth/set', user)
-
-            // console.log('User', user)
-            // console.log('Info', info)
-            // console.log('Session', session)
-            
-            // const jwt = session.accessToken.jwtToken 
-            
-            // console.log("user ", user.attributes['custom:shopName'])
-            // let shopName = user.attributes['custom:shopName']
-            
-            // console.log("JWT", jwt)
-            // let profile = await this.$axios.get('https://pz39j5z4eg.execute-api.us-west-2.amazonaws.com/dev/profile/`${shopName}`',
-            //     { headers: { 'Authorization': `Bearer ${jwt}`} 
-            // })
-
-        //    console.log(profile)
-            // this.profile = profile.data.profile.Items[0]
-        } catch(e) {
-            console.log("Error", `${e.message}`)
-            // this.$router.push('/')
-        }
-    }
+    // async mounted() {
+    //     try {
+    //         const user = await Auth.currentAuthenticatedUser()
+    //         console.log('user ', this.getIsAuth)
+    //         console.log('authed ? ', this.getIsAuth)
+    //         if(!this.getIsAuth) {
+    //             this.$router.push(`/`)
+    //         }            
+    //     } catch(e) {
+    //         console.log("Error", `${e.message}`)
+    //         // this.$router.push('/')
+    //     }
+    // }
 
 }
 </script>
