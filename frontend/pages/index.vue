@@ -8,6 +8,7 @@
         <div class="map-container__right">
           <FeaturedEvents />
         </div>
+        <button @click.prevent="details">Get Uopload URL</button>
       </div>
     </div>
   </div>
@@ -27,6 +28,11 @@ export default {
     Sponsers,
     FeaturedEvents,
   },
+  methods: {
+    details() {
+             console.log(this.$store.state.awsAuth.user)
+         }
+  }
 }
 </script>
 

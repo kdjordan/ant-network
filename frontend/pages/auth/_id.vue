@@ -10,7 +10,7 @@
           <input type="text" v-model="image.desc" placeholder="Description">
           <button type="submit">Submit</button>
       </form>
-      <button @click.prevent="details">Details</button>
+      <button @click.prevent="details">Get Uopload URL</button>
         <h4>Your Images</h4>
         {{shopName}}
           <!-- image Grid v-for  -->
@@ -23,8 +23,8 @@ import { mapGetters } from 'vuex'
 
 export default {
     transition: 'fade',
-    middleware: 'auth-admin',
-    layout: "dealerProfile",
+    // middleware: 'auth-admin',
+    layout: "dealer",
     data() {
         return {
             shopName: '',
@@ -46,20 +46,12 @@ export default {
       getShopName: 'awsAuth/getShopName'
     })
   },
-    // async mounted() {
-    //     try {
-    //         const user = await Auth.currentAuthenticatedUser()
-    //         console.log('user ', this.getIsAuth)
-    //         console.log('authed ? ', this.getIsAuth)
-    //         if(!this.getIsAuth) {
-    //             this.$router.push(`/`)
-    //         }            
-    //     } catch(e) {
-    //         console.log("Error", `${e.message}`)
-    //         // this.$router.push('/')
-    //     }
-    // }
-
+  created() {
+      if(!this.getIsAuth || !(this.$store.state.awsAuth.user.attributes['custom:shopName'] == this.$route.path.split('/')[2])) {
+          console.log('shit')
+          this.$router.push('/')
+      }
+  }
 }
 </script>
 
